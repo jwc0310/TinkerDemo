@@ -65,7 +65,10 @@ public class MainActivity extends AppCompatActivity{
                 break;
 
             case R.id.btn_toast:
+                //修改前
                 Toast.makeText(getApplicationContext(), "使用Tinker修改后的内容", Toast.LENGTH_SHORT).show();
+                //修改后
+                //Toast.makeText(getApplicationContext(), "使用Tinker修改后的内容，你把我改成什么了", Toast.LENGTH_SHORT).show();
                 break;
 
             case R.id.btn_show:
