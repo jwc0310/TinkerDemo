@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.andy.thinker">
+    package="com.andy.tinker">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:name=".TinkerInApplication">
-        <activity android:name=".MainActivity">
+        <activity android:name="com.andy.tinker.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

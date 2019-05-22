@@ -1,4 +1,4 @@
-package com.andy.thinker;
+package com.andy.tinker;
 
 import android.annotation.TargetApi;
 import android.app.Application;

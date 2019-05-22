@@ -1,4 +1,4 @@
-package com.andy.thinker;
+package com.andy.tinker;
 
 import android.content.Context;
 import android.graphics.Typeface;
@@ -21,34 +21,40 @@ import com.tencent.tinker.loader.shareutil.ShareTinkerInternals;
 
 import java.io.File;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.Unbinder;
 
-    private Button mLoadPath;
-    private Button mClearPath;
-    private Button mToast;
-    private Button mShowInfo;
+public class MainActivity extends AppCompatActivity{
+
+    @BindView(R.id.btn_load)
+    Button btnLoad;
+    @BindView(R.id.btn_clear)
+    Button btnClear;
+    @BindView(R.id.btn_toast)
+    Button btnToast;
+    @BindView(R.id.btn_show)
+    Button btnShow;
+    private Unbinder unbinder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        initView();
-    }
-
-    private void initView() {
-        mLoadPath = (Button) findViewById(R.id.btn_load);
-        mClearPath = (Button) findViewById(R.id.btn_clear);
-        mToast = (Button) findViewById(R.id.btn_toast);
-        mShowInfo = (Button) findViewById(R.id.btn_show);
-
-        mLoadPath.setOnClickListener(this);
-        mClearPath.setOnClickListener(this);
-        mToast.setOnClickListener(this);
-        mShowInfo.setOnClickListener(this);
+        unbinder = ButterKnife.bind(this);
     }
 
     @Override
-    public void onClick(View v) {
+    public void onDestroy() {
+        if (unbinder != null) {
+            unbinder.unbind();
+        }
+        super.onDestroy();
+    }
+
+    @OnClick({R.id.btn_load, R.id.btn_clear, R.id.btn_toast, R.id.btn_show})
+    public void onViewClicked(View v) {
         switch (v.getId()) {
             case R.id.btn_load:
                 loadPath();
@@ -59,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.btn_toast:
-                Toast.makeText(getApplicationContext(),"使用Tinker修改后的内容",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "使用Tinker修改后的内容", Toast.LENGTH_SHORT).show();
                 break;
 
             case R.id.btn_show:
@@ -70,12 +76,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     //加载补丁
     private void loadPath() {
-        String path = Environment.getExternalStorageDirectory().getAbsolutePath()+"/patch_signed_7zip.apk";
+        String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/patch_signed_7zip.apk";
         File file = new File(path);
-        if (file.exists()){
+        if (file.exists()) {
             Toast.makeText(this, "补丁存在", Toast.LENGTH_SHORT).show();
             TinkerInstaller.onReceiveUpgradePatch(getApplicationContext(), path);
-        }else {
+        } else {
             Toast.makeText(this, "补丁不存在", Toast.LENGTH_SHORT).show();
         }
     }
@@ -84,11 +90,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void clearPath() {
         Tinker.with(getApplicationContext()).cleanPatch();
 
-        String path = Environment.getExternalStorageDirectory().getAbsolutePath()+"/patch_signed_7zip.apk";
+        String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/patch_signed_7zip.apk";
         File file = new File(path);
-        if (file.exists()){
+        if (file.exists()) {
             Toast.makeText(this, "补丁存在", Toast.LENGTH_SHORT).show();
-        }else {
+        } else {
             Toast.makeText(this, "补丁不存在", Toast.LENGTH_SHORT).show();
         }
 
@@ -100,8 +106,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Tinker tinker = Tinker.with(getApplicationContext());
         if (tinker.isTinkerLoaded()) {
             sb.append(String.format("[patch is loaded] \n"));
-            sb.append(String.format("[buildConfig TINKER_ID] %s \n", "1.7.7"));
-            sb.append(String.format("[buildConfig BASE_TINKER_ID] %s \n", "1.7.7"));
+            sb.append(String.format("[buildConfig TINKER_ID] %s \n", "1.9.1"));
+            sb.append(String.format("[buildConfig BASE_TINKER_ID] %s \n", "1.9.1"));
 
             sb.append(String.format("[buildConfig MESSSAGE] %s \n", "I am the base apk"));
             sb.append(String.format("[TINKER_ID] %s \n", tinker.getTinkerLoadResultIfPresent().getPackageConfigByName(ShareConstants.TINKER_ID)));
@@ -111,7 +117,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else {
             sb.append(String.format("[patch is not loaded] \n"));
             sb.append(String.format("[buildConfig TINKER_ID] %s \n", "1.9.1"));
-            sb.append(String.format("[buildConfig BASE_TINKER_ID] %s \n","1.9.1"));
+            sb.append(String.format("[buildConfig BASE_TINKER_ID] %s \n", "1.9.1"));
 
             sb.append(String.format("[buildConfig MESSSAGE] %s \n", "I am the base apk"));
             sb.append(String.format("[TINKER_ID] %s \n", ShareTinkerInternals.getManifestTinkerID(getApplicationContext())));
@@ -135,4 +141,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         alert.show();
         return true;
     }
+
 }
